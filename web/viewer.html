@@ -13,7 +13,9 @@
     <script src="../common/constants.js"></script>
     <script src="../common/utils.js"></script>
     <script src="js/display.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="chart/chart.js"></script>
+    <script src="chart/graphics.js"></script>
+    <script src="chart/math.js"></script>
 
     <script>
       const { samples, featureNames } = features;
@@ -26,32 +28,16 @@
       }
 
       const options = {
-        width: 400,
-        height: 400,
-        hAxis: { title: featureNames[0] },
-        vAxis: { title: featureNames[1] },
-        legend: { position: "none" },
-        explorer: {
-          maxZoomIn: 0.01,
-          actions: ["dragToZoom", "rightClickToReset"],
-        },
+        size: 500,
+        axesLabels: featureNames,
+        styles: utils.styles,
+        transparency: 0.7,
+        icon: "image",
       };
 
-      google.charts.load("current", { packages: ["corechart", "scatter"] });
+      graphics.generateImages(utils.styles);
 
-      google.charts.setOnLoadCallback(() => {
-        const data = new google.visualization.DataTable();
-        data.addColumn("number", featureNames[0]);
-        data.addColumn("number", featureNames[1]);
-        data.addColumn({ type: "string", role: "style" });
-        data.addRows(samples.map((s) => [...s.point, utils.styles[s.label]]));
-
-        // const chart = new google.visualization.ScatterChart(chartContainer);
-        // chart.draw(data, options);
-
-        const chart = new google.charts.Scatter(chartContainer);
-        chart.draw(data, google.charts.Scatter.convertOptions(options));
-      });
+      const chart = new Chart(chartContainer, samples, options, handleClick);
     </script>
   </body>
 </html>

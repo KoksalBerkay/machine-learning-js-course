@@ -76,3 +76,18 @@ canvas {
 .blur{
     filter: blur(5px);
 }
+
+.emphasize{
+    background-color: yellow;
+}
+
+#container{
+    width: calc(100% - 500px);
+}
+
+#chartContainer{
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+}
