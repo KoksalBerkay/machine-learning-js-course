@@ -88,7 +88,7 @@ utils.invLerp = (a, b, v) => {
 utils.standardizePoints = (points, vars) => {
     const dimensions = points[0].length;
     let mean = Array(dimensions).fill(0);
-    let stdDev = Array(dimensions).fill(0);
+    let stdDev = Array(dimensions).fill(1); // Initialize with ones for correct division
 
     if (vars) {
         mean = vars.mean;
@@ -107,7 +107,7 @@ utils.standardizePoints = (points, vars) => {
                 stdDev[j] += (points[i][j] - mean[j]) ** 2;
             }
         }
-        stdDev = stdDev.map((s) => Math.sqrt(s / points.length));
+        stdDev = stdDev.map((s) => Math.sqrt(s / (points.length - 1))); // Correct the denominator
     }
 
     for (let i = 0; i < points.length; i++) {
@@ -119,6 +119,7 @@ utils.standardizePoints = (points, vars) => {
     console.log("STANDARD DEVIATION: " + stdDev + "\n" + "MEAN: " + mean);
     return { mean, stdDev };
 }
+
 
 if (typeof module !== "undefined") {
     module.exports = utils;
