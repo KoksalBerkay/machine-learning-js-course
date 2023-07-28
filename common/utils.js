@@ -60,30 +60,65 @@ utils.invLerp = (a, b, v) => {
     return (v - a) / (b - a);
 };
 
-utils.normalizePoints = (points, minMax) => {
-    let min, max;
-    const dimensions = points[0].length;
-    if (minMax) {
-        min = minMax.min;
-        max = minMax.max;
-    } else {
-        min = [...points[0]];
-        max = [...points[0]];
+// utils.normalizePoints = (points, minMax) => {
+//     let min, max;
+//     const dimensions = points[0].length;
+//     if (minMax) {
+//         min = minMax.min;
+//         max = minMax.max;
+//     } else {
+//         min = [...points[0]];
+//         max = [...points[0]];
 
-        for (let i = 1; i < points.length; i++) {
+//         for (let i = 1; i < points.length; i++) {
+//             for (let j = 0; j < dimensions; j++) {
+//                 min[j] = Math.min(min[j], points[i][j]);
+//                 max[j] = Math.max(max[j], points[i][j]);
+//             }
+//         }
+//     }
+//     for (let i = 0; i < points.length; i++) {
+//         for (let j = 0; j < dimensions; j++) {
+//             points[i][j] = utils.invLerp(min[j], max[j], points[i][j]);
+//         }
+//     }
+//     return { min, max };
+// };
+
+utils.standardizePoints = (points, vars) => {
+    const dimensions = points[0].length;
+    let mean = Array(dimensions).fill(0);
+    let stdDev = Array(dimensions).fill(0);
+
+    if (vars) {
+        mean = vars.mean;
+        stdDev = vars.stdDev;
+    }
+    else {
+        for (let i = 0; i < points.length; i++) {
             for (let j = 0; j < dimensions; j++) {
-                min[j] = Math.min(min[j], points[i][j]);
-                max[j] = Math.max(max[j], points[i][j]);
+                mean[j] += points[i][j];
             }
         }
+        mean = mean.map((m) => m / points.length);
+
+        for (let i = 0; i < points.length; i++) {
+            for (let j = 0; j < dimensions; j++) {
+                stdDev[j] += (points[i][j] - mean[j]) ** 2;
+            }
+        }
+        stdDev = stdDev.map((s) => Math.sqrt(s / points.length));
     }
+
     for (let i = 0; i < points.length; i++) {
         for (let j = 0; j < dimensions; j++) {
-            points[i][j] = utils.invLerp(min[j], max[j], points[i][j]);
+            points[i][j] = (points[i][j] - mean[j]) / stdDev[j];
         }
     }
-    return { min, max };
-};
+
+    console.log("STANDARD DEVIATION: " + stdDev + "\n" + "MEAN: " + mean);
+    return { mean, stdDev };
+}
 
 if (typeof module !== "undefined") {
     module.exports = utils;

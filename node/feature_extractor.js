@@ -17,7 +17,19 @@ for (const sample of samples) {
     sample.point = functions.map((f) => f(paths));
 }
 
-const minMax = utils.normalizePoints(samples.map(s => s.point));
+const vars = utils.standardizePoints(samples.map(s => s.point));
+
+// for (const sample of samples) {
+//     const paths = JSON.parse(
+//         fs.readFileSync(constants.JSON_DIR + "/" + sample.id + ".json")
+//     );
+
+//     const functions = featureFunctions.inUse.map((f) => f.function);
+//     sample.point = functions.map((f) => f(paths));
+// }
+
+// const minMax = utils.normalizePoints(samples.map(s => s.point));
+
 
 const featureNames = featureFunctions.inUse.map((f) => f.name);
 
@@ -35,9 +47,14 @@ fs.writeFileSync(constants.FEATURES_JS, `
     ${JSON.stringify({ featureNames, samples })};
 `);
 
-fs.writeFileSync(constants.MIN_MAX_JS, `
-    const minMax =
-    ${JSON.stringify(minMax)};
+// fs.writeFileSync(constants.MIN_MAX_JS, `
+//     const minMax =
+//     ${JSON.stringify(minMax)};
+// `);
+
+fs.writeFileSync(constants.VARS_JS, `
+    const vars =
+    ${JSON.stringify(vars)};
 `);
 
 console.log("DONE!");
