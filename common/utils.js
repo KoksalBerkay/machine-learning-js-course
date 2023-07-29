@@ -42,11 +42,19 @@ utils.distance = (p1, p2) => {
 
 utils.getNearest = (loc, points, k = 1) => {
     const obj = points.map((val, ind) => {
-        return { ind, val }
+        return { ind, val };
     });
 
+    // Calculate weighted distances and store them in the objects
+    obj.forEach((obj) => {
+        const distance = utils.distance(loc, obj.val);
+        obj.weightedDistance = 1 / distance;
+        // console.log(`Point ${obj.ind}: Distance=${distance}, Weight=${obj.weightedDistance}`);
+    });
+
+    // Sort based on weighted distances
     const sorted = obj.sort((a, b) => {
-        return utils.distance(loc, a.val) - utils.distance(loc, b.val);
+        return b.weightedDistance - a.weightedDistance;
     });
 
     const indices = sorted.map((obj) => obj.ind);
