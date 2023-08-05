@@ -70,16 +70,35 @@
 
       function classify(point) {
         const samplePoints = samples.map((s) => s.point);
-        const indices = utils.getNearest(point, samplePoints, 10);
-        const nearestSamples = indices.map((i) => samples[i]);
+        const { indices, distances } = utils.getNearest(
+          point,
+          samplePoints,
+          10
+        );
+        const nearestSamples = indices.map((i, index) => {
+          const weight = 1 / distances[index];
+          return { ...samples[i], weight };
+        });
         const labels = nearestSamples.map((s) => s.label);
         const counts = {};
-        for (const label of labels) {
-          counts[label] = counts[label] ? counts[label] + 1 : 1;
+        const weights = {};
+        for (const sample of nearestSamples) {
+          counts[sample.label] = counts[sample.label]
+            ? counts[sample.label] + 1
+            : 1;
+          weights[sample.label] = weights[sample.label]
+            ? weights[sample.label] + sample.weight
+            : sample.weight;
         }
         const max = Math.max(...Object.values(counts));
-        const label = labels.find((l) => counts[l] == max);
-        return { label, nearestSamples };
+        const label = Object.keys(counts).find((l) => counts[l] == max);
+
+        console.log("Labels:", labels);
+        console.log("Counts:", counts);
+        console.log("Weights:", weights);
+        console.log("Max count:", max);
+        console.log("Predicted label:", label);
+        return { label, nearestSamples, weights };
       }
     </script>
   </body>
