@@ -80,25 +80,29 @@
           return { ...samples[i], weight };
         });
         const labels = nearestSamples.map((s) => s.label);
-        const counts = {};
-        const weights = {};
+        const weightedCounts = {};
+
         for (const sample of nearestSamples) {
-          counts[sample.label] = counts[sample.label]
-            ? counts[sample.label] + 1
-            : 1;
-          weights[sample.label] = weights[sample.label]
-            ? weights[sample.label] + sample.weight
+          weightedCounts[sample.label] = weightedCounts[sample.label]
+            ? weightedCounts[sample.label] + sample.weight
             : sample.weight;
         }
-        const max = Math.max(...Object.values(counts));
-        const label = Object.keys(counts).find((l) => counts[l] == max);
+
+        const maxWeight = Math.max(...Object.values(weightedCounts));
+        const predictedLabel = Object.keys(weightedCounts).find(
+          (l) => weightedCounts[l] === maxWeight
+        );
 
         console.log("Labels:", labels);
-        console.log("Counts:", counts);
-        console.log("Weights:", weights);
-        console.log("Max count:", max);
-        console.log("Predicted label:", label);
-        return { label, nearestSamples, weights };
+        console.log("Weighted Counts:", weightedCounts);
+        console.log("Max Weight:", maxWeight);
+        console.log("Predicted label:", predictedLabel);
+
+        return {
+          label: predictedLabel,
+          nearestSamples,
+          weights: weightedCounts,
+        };
       }
     </script>
   </body>
