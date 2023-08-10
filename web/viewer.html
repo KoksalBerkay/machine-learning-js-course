@@ -115,7 +115,13 @@
         const samplePoints = trainingSamples.map((s) => s.point);
         const { indices, distances } = utils.getNearest(point, samplePoints, k);
         const nearestSamples = indices.map((i, index) => {
-          const weight = 1 / distances[index];
+          let weight;
+          const epsilon = 1e-6;
+          if (distances[index] == 0) {
+            weight = 1 / epsilon;
+          } else {
+            weight = 1 / distances[index];
+          }
           return { ...trainingSamples[i], weight };
         });
         const labels = nearestSamples.map((s) => s.label);
@@ -131,11 +137,6 @@
         const predictedLabel = Object.keys(weightedCounts).find(
           (l) => weightedCounts[l] === maxWeight
         );
-
-        // console.log("Labels:", labels);
-        // console.log("Weighted Counts:", weightedCounts);
-        // console.log("Max Weight:", maxWeight);
-        // console.log("Predicted label:", predictedLabel);
 
         return {
           label: predictedLabel,
