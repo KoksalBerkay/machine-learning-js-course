@@ -26,6 +26,7 @@
     <script src="../common/utils.js"></script>
     <script src="../common/draw.js"></script>
     <script src="../common/featureFunctions.js"></script>
+    <script src="../common/classifiers/knn.js"></script>
 
     <script src="js/display.js"></script>
     <script src="js/sketchPad.js"></script>
@@ -40,12 +41,13 @@
       const testingSamples = testing.samples;
 
       const k = 50;
+      const kNN = new KNN(trainingSamples, k);
       let correctCount = 0;
       let totalCount = 0;
       for (const testSample of testingSamples) {
         testSample.truth = testSample.label;
         testSample.label = "?";
-        const { label } = classify(testSample.point);
+        const { label } = kNN.predict(testSample.point);
         testSample.label = label;
         testSample.correct = testSample.label == testSample.truth;
         totalCount++;
@@ -106,43 +108,9 @@
 
         utils.standardizePoints([point], vars);
 
-        const { label, nearestSamples } = classify(point);
+        const { label, nearestSamples } = kNN.predict(point);
         predictedLabelContainer.innerHTML = "Is it a " + label + "?";
         chart.showDynamicPoint(point, label, nearestSamples);
-      }
-
-      function classify(point) {
-        const samplePoints = trainingSamples.map((s) => s.point);
-        const { indices, distances } = utils.getNearest(point, samplePoints, k);
-        const nearestSamples = indices.map((i, index) => {
-          let weight;
-          const epsilon = 1e-6;
-          if (distances[index] == 0) {
-            weight = 1 / epsilon;
-          } else {
-            weight = 1 / distances[index];
-          }
-          return { ...trainingSamples[i], weight };
-        });
-        const labels = nearestSamples.map((s) => s.label);
-        const weightedCounts = {};
-
-        for (const sample of nearestSamples) {
-          weightedCounts[sample.label] = weightedCounts[sample.label]
-            ? weightedCounts[sample.label] + sample.weight
-            : sample.weight;
-        }
-
-        const maxWeight = Math.max(...Object.values(weightedCounts));
-        const predictedLabel = Object.keys(weightedCounts).find(
-          (l) => weightedCounts[l] === maxWeight
-        );
-
-        return {
-          label: predictedLabel,
-          nearestSamples,
-          weights: weightedCounts,
-        };
       }
     </script>
   </body>
