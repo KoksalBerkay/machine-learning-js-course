@@ -35,3 +35,41 @@ console.log(
     utils.formatPercent(correctCount / totalCount) +
     ")"
 );
+
+console.log("GENERATING DECISION BOUNDARY ...");
+
+const { createCanvas } = require("canvas");
+const canvas = createCanvas(100, 100);
+const ctx = canvas.getContext("2d");
+
+// THESE VALUES ARE HARDCODED FOR THE DATASET
+// TODO: MAKE THEM DYNAMIC
+
+const rangeMinX = -2.9;
+const rangeMinY = -2.34;
+
+const rangeMaxX = 3.54;
+const rangeMaxY = 2.94;
+
+const meanOfMax = (rangeMaxX + rangeMaxY) / 2;
+const meanOfMin = (rangeMinX + rangeMinY) / 2;
+
+const step = (meanOfMax - meanOfMin) / canvas.height;
+
+for (let x = 0; x < canvas.width; x++) {
+  for (let y = 0; y < canvas.height; y++) {
+    const point = [
+      rangeMinX + x * step,
+      rangeMinY + (canvas.height - y - 1) * step,
+    ];
+    const { label } = kNN.predict(point);
+    const color = utils.styles[label].color;
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, 1, 1);
+  }
+}
+
+const buffer = canvas.toBuffer("image/png");
+fs.writeFileSync(constants.DECISION_BOUNDARY, buffer);
+
+console.log("DONE!");
