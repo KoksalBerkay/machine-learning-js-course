@@ -87,7 +87,9 @@
         styles: utils.styles,
         transparency: 0.7,
         icon: "image",
+        bg: new Image(),
       };
+      options.bg.src = constants.DECISION_BOUNDARY;
       graphics.generateImages(utils.styles);
 
       const chart = new Chart(
