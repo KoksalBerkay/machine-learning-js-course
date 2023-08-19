@@ -9,6 +9,21 @@ const ctx = canvas.getContext("2d");
 const fs = require("fs");
 const geometry = require("../common/geometry.js");
 
+// This section helps to install the package
+if (fs.existsSync(constants.DATASET_DIR)) {
+  fs.readdirSync(constants.DATASET_DIR).forEach((fileName) =>
+    fs.rmSync(constants.DATASET_DIR + "/" + fileName, { recursive: true })
+  );
+  fs.rmdirSync(constants.DATASET_DIR);
+}
+fs.mkdirSync(constants.DATASET_DIR);
+fs.mkdirSync(constants.JSON_DIR);
+fs.mkdirSync(constants.IMG_DIR);
+if (!fs.existsSync(constants.MODELS_DIR)) {
+  fs.mkdirSync(constants.MODELS_DIR);
+}
+console.log("GENERATING DATASET ...");
+
 const fileNames = fs.readdirSync(constants.RAW_DIR);
 const samples = [];
 let id = 1;
@@ -32,13 +47,15 @@ fileNames.forEach((fn) => {
 
     generateImageFile(constants.IMG_DIR + "/" + id + ".png", paths);
 
-    utils.printProgress(id, fileNames.length * 8); // each file contains 8 drawings
+    utils.printProgress(id, fileNames.length * 8);
     id++;
   }
 });
+console.log("\n");
 
 fs.writeFileSync(constants.SAMPLES, JSON.stringify(samples));
 
+fs.mkdirSync(constants.JS_OBJECTS, { recursive: true });
 fs.writeFileSync(
   constants.SAMPLES_JS,
   "const samples = " + JSON.stringify(samples) + ";"

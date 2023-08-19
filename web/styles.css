@@ -1,9 +1,16 @@
 body{
     font-family: Arial;
-    background-color: skyblue;
     overscroll-behavior: none;
     touch-action: manipulation;
-    padding: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: #000;
+    color: white;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 h1 {
@@ -22,18 +29,19 @@ h1 {
 
 button {
     cursor: pointer;
-    border: none;
-    padding: 10px 20px;
+    border: transparent;
+    padding: 0.75rem 1.25rem;
     border-radius: 5px;
-    background-color: navy;
+    background-color: #f60;
     color: white;
     font-size: 14px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: 200ms ease-in-out;
+    vertical-align: middle;
 }
 
 button:hover{
-    background-color: mediumblue;
+    background-color: #f80;
 }
 
 button:disabled,
@@ -49,10 +57,16 @@ canvas {
 .row{
     display: flex;
     align-items: center;
+    background-color: #151515;
+}
+
+.row:nth-child(even) {
+    background-color: #000;
 }
 
 .thumb{
     width: 100%;
+    filter: invert(1);
 }
 
 .rowLabel{
@@ -60,25 +74,46 @@ canvas {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    width: 15%;
+    margin-left: 3rem;
+    font-weight: bold;
 }
 
 .sampleContainer{
     flex:1 1 0;
-    background-color: white;
     text-align: center;
-    border-radius: 10%;
-    margin: 10px;
+    border-radius: 5px;
+    margin: 2px;
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: 2px solid #f60;
+    text-transform: capitalize;
     overflow: hidden;
 }
 
 .blur{
-    filter: blur(5px);
+    filter: invert(1) blur(5px);
 }
 
 .emphasize{
-    background-color: yellow !important;
+    background-color: #AA0 !important;
+}
+
+/**new style*/
+input,
+#instructions {
+    border: transparent;
+    outline: 2px solid #f60;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+    background-color: #000;
+    color: white;
+    vertical-align: middle;
+    transition: 200ms ease-in-out;
+}
+
+#instructions {
+    margin-right: 0.75rem;
 }
 
 #container{
@@ -90,6 +125,8 @@ canvas {
     right: 0;
     top: 50%;
     transform: translate(0, -50%);
+    z-index: 2;
+    color: black;
 }
 
 #inputContainer{
@@ -99,6 +136,7 @@ canvas {
     transform: translate(0, -50%);
     text-align: center;
     margin: 10px;
+    z-index: 1;
 }
 
 #controlPanel {
@@ -108,12 +146,14 @@ canvas {
     width: 500px;
     text-align: center;
     padding: 10px;
+    z-index: 1;
 }
 
 #predictedLabelContainer {
     color: white;
     font-size: 30px;
     position: relative;
+    z-index: 1;
 }
 
 #statistic {

@@ -3,7 +3,7 @@ if (typeof utils === "undefined") {
 }
 
 class KNN {
-  constructor(samples, k) {
+  constructor(samples, k = 50) {
     this.samples = samples;
     this.k = k;
   }

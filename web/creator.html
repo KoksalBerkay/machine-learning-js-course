@@ -15,7 +15,7 @@
       <h1>Data Creator</h1>
       <div>
         <input id="student" type="text" placeholder="type your name" />
-        <span id="instructions"></span>
+        <span id="instructions" style="display: none"></span>
         <button id="advancedBtn" onclick="start()">START</button>
       </div>
       <br />
@@ -26,7 +26,7 @@
 
     <script>
       let index = 0;
-      const labels = [
+      const classes = [
         "car",
         "fish",
         "house",
@@ -53,8 +53,9 @@
         data.student = student.value;
         student.style.display = "none";
         sketchPadContainer.style.visibility = "visible";
-        const label = labels[index];
+        const label = classes[index];
         instructions.innerHTML = `Please draw a ${label}`;
+        instructions.style.display = "initial";
         advancedBtn.innerHTML = "NEXT";
         advancedBtn.onclick = next;
       }
@@ -65,12 +66,12 @@
           return;
         }
 
-        const label = labels[index];
+        const label = classes[index];
         data.drawings[label] = sketchPad.paths;
         sketchPad.reset();
         index++;
-        if (index < labels.length) {
-          const nextLabel = labels[index];
+        if (index < classes.length) {
+          const nextLabel = classes[index];
           instructions.innerHTML = `Please draw a ${nextLabel}`;
         } else {
           sketchPadContainer.style.visibility = "hidden";
@@ -88,17 +89,17 @@
         const element = document.createElement("a");
         element.setAttribute(
           "href",
-          "data:text/plain;charset=utf-8," +
+          "data:application/json;charset=utf-8," +
             encodeURIComponent(JSON.stringify(data))
         );
 
         const filename = data.session + ".json";
         element.setAttribute("download", filename);
 
-        element.style.display = "none";
-        document.body.appendChild(element);
+        // element.style.display = "none";
+        // document.body.appendChild(element);
         element.click();
-        document.body.removeChild(element);
+        // document.body.removeChild(element);
       }
     </script>
   </body>

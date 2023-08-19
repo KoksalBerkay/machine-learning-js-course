@@ -16,7 +16,6 @@
       <div id="statistics"></div>
     </div>
     <div id="container"></div>
-    <script src="../common/js_objects/features.js"></script>
     <script src="../common/js_objects/training.js"></script>
     <script src="../common/js_objects/testing.js"></script>
     <!-- <script src="../common/js_objects/minMax.js"></script> -->
@@ -37,19 +36,20 @@
     <script src="chart/math.js"></script>
 
     <script>
-      const { samples, featureNames } = features;
+      const featureNames = training.featureNames;
       const trainingSamples = training.samples;
       const testingSamples = testing.samples;
 
-      const k = 50;
-      const kNN = new KNN(trainingSamples, k);
+      // Classifying the testing samples
+      const kNN = new KNN(trainingSamples);
       let correctCount = 0;
       let totalCount = 0;
       for (const testSample of testingSamples) {
         testSample.truth = testSample.label;
         testSample.label = "?";
-        const { label } = kNN.predict(testSample.point);
+        const { label, nearestSamples } = kNN.predict(testSample.point);
         testSample.label = label;
+        testSample.nearestSamples = nearestSamples;
         testSample.correct = testSample.label == testSample.truth;
         totalCount++;
         correctCount += testSample.correct ? 1 : 0;
@@ -63,6 +63,7 @@
         utils.formatPercent(correctCount / totalCount) +
         ")";
 
+      // Displaying the data grid
       const trainingGroups = utils.groupBy(trainingSamples, "student_id");
       for (let student_id in trainingGroups) {
         const samples = trainingGroups[student_id];
@@ -81,11 +82,12 @@
         createRow(container, studentName, samples);
       }
 
+      // Initializing the Chart
       const options = {
         size: 500,
         axesLabels: featureNames,
         styles: utils.styles,
-        transparency: 0.7,
+        transparency: 0.9,
         icon: "image",
         bg: new Image(),
       };
@@ -99,17 +101,16 @@
         handleClick
       );
 
+      // Initializing the Sketch Pad
       const sketchPad = new SketchPad(inputContainer, onDrawingUpdate);
       sketchPad.canvas.style.cssText +=
-        "outline: 10000px solid rgba(0,0,0,0.7)";
+        "outline:10000px solid rgba(255,255,255,0.7);";
       toggleInput();
 
       function onDrawingUpdate(paths) {
         const functions = featureFunctions.inUse.map((f) => f.function);
-        var point = functions.map((f) => f(paths));
-
+        point = functions.map((f) => f(paths));
         utils.standardizePoints([point], vars);
-
         const { label, nearestSamples } = kNN.predict(point);
         predictedLabelContainer.innerHTML = "Is it a " + label + "?";
         chart.showDynamicPoint(point, label, nearestSamples);

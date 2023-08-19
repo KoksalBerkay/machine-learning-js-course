@@ -1,6 +1,8 @@
 const utils = {};
 
-utils.flaggedUsers = [1663882102141, 1663900040545, 1664485938220];
+utils.flaggedUsers = [
+  1663882102141, 1663900040545, 1664485938220, 1664485938220, 1682255271235,
+];
 
 utils.styles = {
   car: { color: "gray", text: "🚗" },

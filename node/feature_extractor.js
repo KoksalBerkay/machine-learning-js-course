@@ -45,31 +45,10 @@ for (let i = 0; i < samples.length; i++) {
   }
 }
 
-const vars = utils.standardizePoints(training.map((s) => s.point)); // samples.map(s => s.point));
+const vars = utils.standardizePoints(training.map((s) => s.point));
 utils.standardizePoints(
   testing.map((s) => s.point),
   vars
-);
-
-fs.writeFileSync(
-  constants.FEATURES,
-  JSON.stringify({
-    featureNames,
-    samples: samples.map((s) => {
-      return {
-        point: s.point,
-        label: s.label,
-      };
-    }),
-  })
-);
-
-fs.writeFileSync(
-  constants.FEATURES_JS,
-  `
-    const features = 
-    ${JSON.stringify({ featureNames, samples })};
-`
 );
 
 fs.writeFileSync(
@@ -86,19 +65,19 @@ fs.writeFileSync(
 );
 
 fs.writeFileSync(
-  constants.TRAINING_CSV,
-  utils.toCSV(
-    [...featureNames, "Label"],
-    training.map((s) => [...s.point, s.label])
-  )
-);
-
-fs.writeFileSync(
   constants.TRAINING_JS,
   `
     const training = 
     ${JSON.stringify({ featureNames, samples: training })};
 `
+);
+
+fs.writeFileSync(
+  constants.TRAINING_CSV,
+  utils.toCSV(
+    [...featureNames, "Label"],
+    training.map((s) => [...s.point, s.label])
+  )
 );
 
 fs.writeFileSync(
@@ -115,19 +94,19 @@ fs.writeFileSync(
 );
 
 fs.writeFileSync(
-  constants.TESTING_CSV,
-  utils.toCSV(
-    [...featureNames, "Label"],
-    testing.map((s) => [...s.point, s.label])
-  )
-);
-
-fs.writeFileSync(
   constants.TESTING_JS,
   `
     const testing = 
     ${JSON.stringify({ featureNames, samples: testing })};
 `
+);
+
+fs.writeFileSync(
+  constants.TESTING_CSV,
+  utils.toCSV(
+    [...featureNames, "Label"],
+    testing.map((s) => [...s.point, s.label])
+  )
 );
 
 // fs.writeFileSync(constants.MIN_MAX_JS, `
