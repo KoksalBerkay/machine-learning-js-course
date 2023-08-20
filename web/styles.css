@@ -89,6 +89,7 @@ canvas {
     outline: 2px solid #f60;
     text-transform: capitalize;
     overflow: hidden;
+    max-width: 8%;
 }
 
 .blur{
@@ -159,4 +160,28 @@ input,
 #statistic {
     font-size: 20px;
     padding: 20px;
+}
+
+.flagged {
+    background-color: red !important;
+}
+
+.infoButton {
+    color: red;
+    cursor: pointer;
+}
+
+.infoButton:hover .tooltipText{
+    visibility: visible;
+}
+
+.tooltipText{
+    color: white;
+    background-color: red;
+    position: absolute;
+    visibility: hidden;
+    font-size: small;
+    border-radius: 6px;
+    padding: 6px;
+    font-weight: normal;
 }

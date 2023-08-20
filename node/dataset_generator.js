@@ -32,21 +32,22 @@ fileNames.forEach((fn) => {
   const content = fs.readFileSync(constants.RAW_DIR + "/" + fn);
   const { session, student, drawings } = JSON.parse(content);
   for (let label in drawings) {
-    samples.push({
-      id,
-      label,
-      student_name: student,
-      student_id: session,
-    });
+    if (!utils.flaggedSamples.includes(id)) {
+      samples.push({
+        id,
+        label,
+        student_name: student,
+        student_id: session,
+      });
 
-    const paths = drawings[label];
-    fs.writeFileSync(
-      constants.JSON_DIR + "/" + id + ".json",
-      JSON.stringify(paths)
-    );
+      const paths = drawings[label];
+      fs.writeFileSync(
+        constants.JSON_DIR + "/" + id + ".json",
+        JSON.stringify(paths)
+      );
 
-    generateImageFile(constants.IMG_DIR + "/" + id + ".png", paths);
-
+      generateImageFile(constants.IMG_DIR + "/" + id + ".png", paths);
+    }
     utils.printProgress(id, fileNames.length * 8);
     id++;
   }
