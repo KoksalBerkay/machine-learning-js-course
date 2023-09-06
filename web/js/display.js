@@ -73,3 +73,11 @@ function toggleInput() {
     chart.hideDynamicPoint();
   }
 }
+
+function toggleOutput() {
+  if (confusionContainer.style.display == "none") {
+    confusionContainer.style.display = "block";
+  } else {
+    confusionContainer.style.display = "none";
+  }
+}

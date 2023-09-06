@@ -41,6 +41,17 @@ utils.styles = {
 };
 utils.styles["?"] = { color: "red", text: "❓" };
 
+utils.classes = [
+  "car",
+  "fish",
+  "house",
+  "tree",
+  "bicycle",
+  "guitar",
+  "pencil",
+  "clock",
+];
+
 utils.formatPercent = (n) => {
   return (n * 100).toFixed(2) + "%";
 };
