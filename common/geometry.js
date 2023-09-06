@@ -1,7 +1,54 @@
-// Original Author:
+// Adapted From Original Author:
 // https://gist.github.com/id-ilych/8630fb273e5c5a0b64ca1dc080d68b63
 
+if (typeof utils === "undefined") {
+  utils = require("./utils.js");
+}
+
 const geometry = {};
+
+geometry.roundness = (polygon) => {
+  const length = geometry.length(polygon);
+  const area = geometry.area(polygon);
+  const R = length / (Math.PI * 2);
+  const circleArea = Math.PI * R ** 2;
+  const roundness = area / circleArea;
+
+  if (isNaN(roundness)) {
+    return 0;
+  }
+  return roundness;
+};
+
+geometry.length = (polygon) => {
+  let length = 0;
+  for (let i = 0; i < polygon.length; i++) {
+    const nextI = (i + 1) % polygon.length;
+    length += utils.distance(polygon[i], polygon[nextI]);
+  }
+  return length;
+};
+
+geometry.area = (polygon) => {
+  let area = 0;
+  const A = polygon[0];
+  for (let i = 1; i < polygon.length - 1; i++) {
+    const B = polygon[i];
+    const C = polygon[i + 1];
+    area += geometry.triangleArea(A, B, C);
+  }
+  return area;
+};
+
+geometry.triangleArea = (A, B, C) => {
+  const a = utils.distance(B, C);
+  const b = utils.distance(A, C);
+  const c = utils.distance(A, B);
+
+  const p = (a + b + c) / 2;
+  const area = Math.sqrt(p * (p - a) * (p - b) * (p - c));
+  return area;
+};
 
 // for all the functions below, assume screen coordinates: the x-axis is rightward, the y-axis is downward
 

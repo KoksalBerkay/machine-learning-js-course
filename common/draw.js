@@ -1,8 +1,8 @@
 const draw = {};
 
-draw.path = (ctx, path, color = "black") => {
+draw.path = (ctx, path, color = "black", width = 3) => {
   ctx.strokeStyle = color;
-  ctx.lineWidth = 3;
+  ctx.lineWidth = width;
   ctx.beginPath();
   ctx.moveTo(...path[0]); // This syntax spreads the array into two arguments
 

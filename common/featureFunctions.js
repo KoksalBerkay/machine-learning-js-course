@@ -35,12 +35,19 @@ featureFunctions.getElongation = (paths) => {
   return (Math.max(width, height) + 1) / (Math.min(width, height) + 1);
 };
 
+featureFunctions.getRoundness = (paths) => {
+  const points = paths.flat();
+  const { hull } = geometry.minimumBoundingBox({ points });
+  return geometry.roundness(hull);
+};
+
 featureFunctions.inUse = [
   //{name:"Path Count",function:featureFunctions.getPathCount},
   //{name:"Point Count",function:featureFunctions.getPointCount},
   { name: "Width", function: featureFunctions.getWidth },
   { name: "Height", function: featureFunctions.getHeight },
   { name: "Elongation", function: featureFunctions.getElongation },
+  { name: "Roundness", function: featureFunctions.getRoundness },
 ];
 
 if (typeof module !== "undefined") {

@@ -70,8 +70,15 @@ function generateImageFile(outFile, paths) {
   const { vertices, hull } = geometry.minimumBoundingBox({
     points: paths.flat(),
   });
-  draw.path(ctx, [...vertices, vertices[0]], "red");
-  draw.path(ctx, [...hull, hull[0]], "blue");
+  const roundness = geometry.roundness(hull);
+
+  const R = 255 - Math.floor(roundness ** 5 * 255);
+  const G = 255 - 0;
+  const B = 255 - Math.floor((1 - roundness ** 5) * 255);
+  const color = `rgb(${R}, ${G}, ${B})`;
+
+  // draw.path(ctx, [...vertices, vertices[0]], "red");
+  draw.path(ctx, [...hull, hull[0]], color, 10);
 
   const buffer = canvas.toBuffer("image/png");
   fs.writeFileSync(outFile, buffer);

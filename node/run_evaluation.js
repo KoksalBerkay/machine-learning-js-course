@@ -60,6 +60,11 @@ const step = (meanOfMax - meanOfMin) / imgSize;
 for (let x = 0; x < canvas.width; x++) {
   for (let y = 0; y < canvas.height; y++) {
     const point = [rangeMinX + x * step, rangeMinY + (imgSize - y - 1) * step];
+
+    while (point.length < trainingSamples[0].point.length) {
+      point.push(0);
+    }
+
     const { label } = kNN.predict(point);
     const color = utils.styles[label].color;
     ctx.fillStyle = color;
