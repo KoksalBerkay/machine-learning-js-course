@@ -8,6 +8,7 @@ const ctx = canvas.getContext("2d");
 
 const fs = require("fs");
 const geometry = require("../common/geometry.js");
+const featureFunctions = require("../common/featureFunctions.js");
 
 // This section helps to install the package
 if (fs.existsSync(constants.DATASET_DIR)) {
@@ -67,18 +68,18 @@ function generateImageFile(outFile, paths) {
 
   draw.paths(ctx, paths);
 
-  const { vertices, hull } = geometry.minimumBoundingBox({
-    points: paths.flat(),
-  });
-  const roundness = geometry.roundness(hull);
-
-  const R = 255 - Math.floor(roundness ** 5 * 255);
-  const G = 255 - 0;
-  const B = 255 - Math.floor((1 - roundness ** 5) * 255);
-  const color = `rgb(${R}, ${G}, ${B})`;
-
-  // draw.path(ctx, [...vertices, vertices[0]], "red");
-  draw.path(ctx, [...hull, hull[0]], color, 10);
+  const pixels = featureFunctions.getPixels(paths);
+  const size = Math.sqrt(pixels.length);
+  const imgData = ctx.getImageData(0, 0, size, size);
+  for (let i = 0; i < pixels.length; i++) {
+    const alpha = pixels[i];
+    const startIndex = i * 4;
+    imgData.data[startIndex] = 0;
+    imgData.data[startIndex + 1] = 0;
+    imgData.data[startIndex + 2] = 0;
+    imgData.data[startIndex + 3] = alpha;
+  }
+  ctx.putImageData(imgData, 0, 0);
 
   const buffer = canvas.toBuffer("image/png");
   fs.writeFileSync(outFile, buffer);
