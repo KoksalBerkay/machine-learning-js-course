@@ -137,6 +137,13 @@ input,
     z-index: 1;
 }
 
+#networkCanvas {
+    position: absolute;
+    right: 0px;
+    background-color: black;
+    z-index: 1;
+}
+
 #inputContainer{
     position: fixed;
     right: 500px;
