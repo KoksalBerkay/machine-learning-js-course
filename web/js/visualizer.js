@@ -43,7 +43,7 @@ class Visualizer {
         ctx.moveTo(Visualizer.#getNodeX(inputs, i, left, right), bottom);
         ctx.lineTo(Visualizer.#getNodeX(outputs, j, left, right), top);
         ctx.lineWidth = 2;
-        ctx.strokeStyle = getRGBA(weights[i][j]);
+        ctx.strokeStyle = getRGBA(weights[i][j] * inputs[i]);
         ctx.stroke();
       }
     }

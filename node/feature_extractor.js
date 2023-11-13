@@ -15,7 +15,8 @@ for (let i = 0; i < samples.length; i++) {
   );
 
   const functions = featureFunctions.inUse.map((f) => f.function);
-  sample.point = functions.map((f) => f(paths));
+  //sample.point = functions.map((f) => f(paths));
+  sample.point = Object.values(functions[0](paths));
   utils.printProgress(i, samples.length - 1);
 }
 
@@ -30,7 +31,8 @@ for (let i = 0; i < samples.length; i++) {
 
 // const minMax = utils.normalizePoints(training.map(s => s.point));
 
-const featureNames = featureFunctions.inUse.map((f) => f.name);
+//const featureNames = featureFunctions.inUse.map((f) => f.name);
+const featureNames = Array(samples[0].point.length).fill(" ");
 
 console.log("GENERATING SPLITS...");
 
