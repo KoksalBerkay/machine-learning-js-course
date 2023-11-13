@@ -52,7 +52,7 @@ class Level {
         sum += level.inputs[j] * level.weights[j][i];
       }
 
-      level.outputs[i] = sum + level.biases[i];
+      level.outputs[i] = Math.tanh(sum + level.biases[i]);
     }
 
     return level.outputs;

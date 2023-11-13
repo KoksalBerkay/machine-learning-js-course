@@ -1,9 +1,9 @@
 const constants = require("../common/constants.js");
+const utils = require("../common/utils.js");
 
 const MLP = require("../common/classifiers/mlp.js");
 
 const fs = require("fs");
-const utils = require("../common/utils.js");
 
 console.log("RUNNING CLASSIFICATION...");
 
@@ -20,7 +20,7 @@ if (fs.existsSync(constants.MODEL)) {
   mlp.load(JSON.parse(fs.readFileSync(constants.MODEL)));
 }
 
-mlp.fit(trainingSamples, 5000);
+mlp.fit(trainingSamples);
 
 fs.writeFileSync(constants.MODEL, JSON.stringify(mlp));
 

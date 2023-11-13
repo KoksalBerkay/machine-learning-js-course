@@ -21,7 +21,6 @@ class MLP {
     const max = Math.max(...output);
     const index = output.indexOf(max);
     const label = this.classes[index];
-
     return { label };
   }
   fit(samples, tries = 1000) {
